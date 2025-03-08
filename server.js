@@ -4,13 +4,22 @@ const { Server } = require('socket.io');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST']
+}));
+
+// Add health check endpoint
+app.get('/', (req, res) => {
+  res.json({ status: 'Server is running' });
+});
 
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: '*',  // Allow all origins temporarily
+    methods: ["GET", "POST"],
+    credentials: true
   }
 });
 
